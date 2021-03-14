@@ -18,10 +18,9 @@
  *
  */
 const sections = document.querySelectorAll("section");
-
 const navList = document.querySelector("#navbar__list");
 const navItems = document.querySelectorAll("li");
-
+const navLinks = document.querySelectorAll(".menu__link");
 const fragment = document.createDocumentFragment();
 
 /**
@@ -29,16 +28,31 @@ const fragment = document.createDocumentFragment();
  * Start Helper Functions
  *
  */
+
 function toggleActiveState() {
-  let observer = new IntersectionObserver(function () {});
+  const options = {
+    rootMargin: "-100px",
+    threshold: 0.25,
+  };
+  const observer = new IntersectionObserver(function (entries, observer) {
+    entries.forEach((entry) => {
+      let navId = entry.target.getAttribute("id");
+      let active = document.querySelector(`#${navId}link`);
+      if (entry.isIntersecting === true) {
+        entry.target.classList.add("your-active-class");
+        active.classList.add("item-active-class");
+      } else {
+        entry.target.classList.remove("your-active-class");
+        active.classList.remove("item-active-class");
+      }
+    });
+  }, options);
   sections.forEach(function (section) {
     section.classList.remove("your-active-class");
     observer.observe(section);
   });
-  navItems.forEach(function (navItem) {
-    navItem.classList.remove("item-active-class");
-  });
 }
+
 /**
  * End Helper Functions
  * Begin Main Functions
@@ -50,13 +64,14 @@ sections.forEach(function (section) {
   const li = document.createElement("li");
   const a = document.createElement("a");
   a.href = `#${section.id}`;
+  a.id = `${section.id}link`;
   a.textContent = section.dataset.nav;
+  a.classList.add("menu__link");
+  a.addEventListener("click", scrollToSection);
   li.appendChild(a);
   fragment.appendChild(li);
 });
-
 navList.appendChild(fragment);
-
 // Add class 'active' to section when near top of viewport
 
 // Scroll to anchor ID using scrollTO event
@@ -70,5 +85,13 @@ window.addEventListener("scroll", toggleActiveState);
 // Build menu
 
 // Scroll to section on link click
+function scrollToSection(e) {
+  e.preventDefault();
+  const href = this.getAttribute("href");
+  document.querySelector(href).scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+  });
+}
 
 // Set sections as active

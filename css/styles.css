@@ -63,6 +63,7 @@ section {
 /* ---- Module Rules ---- */
 
 /* Navigation Styles*/
+
 .navbar__menu ul {
     padding-left: 0;
     margin: 0;
@@ -92,8 +93,31 @@ section {
     transition: ease 0.3s all;
 
 }
-
-
+.navbar__menu .icon {
+    display: none;
+    }
+@media(max-width : 35em){
+    
+    .navbar__list {
+        display: none;
+        
+    }
+    .show{
+        display: flex;
+        flex-direction: column;
+        clear: both;
+    }
+    .navbar__list li{
+        text-align: center;
+    }
+    .navbar__menu a.icon {
+        display: block;
+        font-size: 2em;
+        position: relative;
+        float: right;
+        right: 0.5em;
+        }
+}
 /* Header Styles */
 .page__header {
     background: #fff;

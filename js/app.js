@@ -22,19 +22,31 @@ const navList = document.querySelector("#navbar__list");
 const navItems = document.querySelectorAll("li");
 const navLinks = document.querySelectorAll(".menu__link");
 const fragment = document.createDocumentFragment();
-
+const iconMenu = document.querySelector(".icon");
 /**
  * End Global Variables
  * Start Helper Functions
  *
  */
-
+// this function is responsible for showing the navigation menu or hiding it
+function toggleMenu() {
+  if (navList.className == "navbar__list") {
+    navList.classList.add("show");
+  } else {
+    navList.classList.remove("show");
+  }
+}
+// this function is responsible for changing class names on the section
+// depending on if the section is visible on the viewport or not
 function toggleActiveState() {
   const options = {
     rootMargin: "-100px",
     threshold: 0.25,
   };
+  // the intersection observer takes one argument and it's a function
+  // the function takes two arguments entries and the observer itself
   const observer = new IntersectionObserver(function (entries, observer) {
+    // looping through the entries every entry is a section
     entries.forEach((entry) => {
       let navId = entry.target.getAttribute("id");
       let active = document.querySelector(`#${navId}link`);
@@ -48,7 +60,10 @@ function toggleActiveState() {
     });
   }, options);
   sections.forEach(function (section) {
+    // it removes the class from all the sections
     section.classList.remove("your-active-class");
+    // call the observe method from the observer object
+    // and passing the section as an argument
     observer.observe(section);
   });
 }
@@ -59,7 +74,8 @@ function toggleActiveState() {
  *
  */
 
-// build the nav
+// build the nav by looping through the sections
+// for every section it adds a link in the navbar
 sections.forEach(function (section) {
   const li = document.createElement("li");
   const a = document.createElement("a");
@@ -72,18 +88,13 @@ sections.forEach(function (section) {
   fragment.appendChild(li);
 });
 navList.appendChild(fragment);
-// Add class 'active' to section when near top of viewport
-
-// Scroll to anchor ID using scrollTO event
-
 /**
  * End Main Functions
  * Begin Events
  *
  */
 window.addEventListener("scroll", toggleActiveState);
-// Build menu
-
+iconMenu.addEventListener("click", toggleMenu);
 // Scroll to section on link click
 function scrollToSection(e) {
   e.preventDefault();
@@ -93,5 +104,3 @@ function scrollToSection(e) {
     block: "center",
   });
 }
-
-// Set sections as active
